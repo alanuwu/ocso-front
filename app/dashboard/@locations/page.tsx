@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { Select, SelectItem } from "@heroui/react";
 import { Location } from "@/entities";
 import SelectLocation from "@/app/dashboard/@locations/_components/SelectLocation";
+import LocationCard from "./_components/LocationCard";
 
 interface Props {
     searchParams: { [key: string]: string | string[] | undefined }
@@ -29,6 +30,11 @@ const LocationsPage = async ({searchParams}: Props) => {
         <div className="w-full flex flex-col items-center h-[90vh] bg-red-50 ">
             <div className={"w-1/2 my-8"}>
                 <SelectLocation locations={data} store={searchParams.store} />
+            </div>
+            <div className="w-8/12">
+                <LocationCard store={searchParams.store}>
+
+                </LocationCard>
             </div>
         </div>
     </div>)

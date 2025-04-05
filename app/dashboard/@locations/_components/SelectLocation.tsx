@@ -13,8 +13,8 @@ export default function SelectLocation({ locations, store }: { locations: Locati
             }}
             onChange={(e) => {
                 if(e.target.value === "0" || e.target.value === ""){
-                    router.push('/dashboard')
-                }else{
+                    router.push('/dashboard?store=0')
+                } else {
                     router.push(`/dashboard?store=${e.target.value}`)
                 }
             }}>
