@@ -1,10 +1,11 @@
-import { TOKEN_NAME } from "@/constants"
+import { API_URL, TOKEN_NAME } from "@/constants"
 import axios from "axios";
 import { cookies } from "next/headers";
 import { Select, SelectItem } from "@heroui/react";
 import { Location } from "@/entities";
 import SelectLocation from "@/app/dashboard/@locations/_components/SelectLocation";
 import LocationCard from "./_components/LocationCard";
+import FormNewLocation from "./_components/FormNewLocations";
 
 interface Props {
     searchParams: { [key: string]: string | string[] | undefined }
@@ -12,7 +13,7 @@ interface Props {
 const LocationsPage = async ({searchParams}: Props) => {
     const userCookies = cookies()
     const token = userCookies.get(TOKEN_NAME)?.value
-    let { data } = await axios.get<Location[]>("http://localhost:4500/locations", {
+    let { data } = await axios.get<Location[]>(`${API_URL}/locations`, {
         headers: {
             Authorization: `Bearer ${token}`,
         }
@@ -36,6 +37,7 @@ const LocationsPage = async ({searchParams}: Props) => {
 
                 </LocationCard>
             </div>
+            <FormNewLocation/>
         </div>
     </div>)
 }
