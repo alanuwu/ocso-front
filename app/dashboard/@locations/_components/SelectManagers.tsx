@@ -7,15 +7,21 @@ export default function SelectManager({ managers, locations }: { managers: Manag
         return location.manager?.managerId
     }).filter((managerId) => managerId !== undefined)
     return (
-        <Select name="manager" label="Manager" disabledKeys={disabledKeys}>
+        <Select 
+            name="manager" 
+            label="Manager" 
+            disabledKeys={disabledKeys} 
+            className="bg-white rounded-lg" 
+            popoverProps={{ className: "bg-white rounded-lg" }}
+        >
             {
-                managers.map((manager: Manager) => {
-                    return (
-                        <SelectItem key={manager.managerId}>
-                            {manager.managerFullName}
-                        </SelectItem>
-                    )
-                })
+            managers.map((manager: Manager) => {
+            return (
+            <SelectItem key={manager.managerId}>
+                {manager.managerFullName}
+            </SelectItem>
+            )
+            })
             }
         </Select>
     )
