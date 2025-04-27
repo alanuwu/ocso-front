@@ -1,9 +1,11 @@
 'use server';
-import axios from "axios";
+import { redirect } from "next/navigation";
+import { Location } from "@/entities";
 import { cookies } from "next/headers";
-import { API_URL, TOKEN_NAME } from "@/constants";
+import { API_URL } from "@/constants";
+import { AuthHeaders } from "@/helpers/authHeaders";
+import { revalidateTag } from "next/cache";
 export async function createLocation(formData: FormData) {
-    const token = cookies().get(TOKEN_NAME)?.value;
     let location: any = {};
     let locationLatLng = [0, 0];
     for (const key of Array.from(formData.keys())) {
@@ -19,11 +21,17 @@ export async function createLocation(formData: FormData) {
         }
     }
     location.locationLatLng = locationLatLng;
-axios.post(`${API_URL}/locations`, {
-    ...location
-}, {
+const response = await fetch(`${API_URL}/locations`, {
+    method: "POST",
+    body: JSON.stringify(location),
     headers: {
-        Authorization: `Bearer ${token}`
+        'content-type': 'application/json',
+        ...AuthHeaders()
     }
 })
+    const { locationId }: Location = await response.json();
+    if(response.status === 201) {
+        revalidateTag("dashboard:locations");
+        redirect(`/dashboard?store=${locationId}`)
+    }
 }

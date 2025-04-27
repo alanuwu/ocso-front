@@ -1,5 +1,4 @@
 import { API_URL, TOKEN_NAME } from "@/constants"
-import axios from "axios";
 import { cookies } from "next/headers";
 import { Select, SelectItem } from "@heroui/react";
 import { Location } from "@/entities";
@@ -8,16 +7,23 @@ import LocationCard from "./_components/LocationCard";
 import FormNewLocation from "./_components/FormNewLocations";
 import DeleteLocationButton from "./_components/DeleteLocationButton";
 import { AuthHeaders } from "@/helpers/authHeaders";
+import UpdateLocation from "./_components/UpdateLocation";
+import FormUpdateLocation from "./_components/FormUpdateLocation";
 
 interface Props {
     searchParams: { [key: string]: string | string[] | undefined }
 }
 const LocationsPage = async ({ searchParams }: Props) => {
-    let { data } = await axios.get<Location[]>(`${API_URL}/locations`, {
+    const response = await fetch(`${API_URL}/locations`, {
+        method: "GET",
         headers: {
             ...AuthHeaders()
+        },
+        next: {
+            tags: ["dashboard:locations:employees"]
         }
     });
+    let data: Location[] = await response.json();
     data = [
         {
             locationId: 0,
@@ -41,6 +47,9 @@ const LocationsPage = async ({ searchParams }: Props) => {
                 <FormNewLocation store={searchParams.store} />
             </div>
             <DeleteLocationButton store={searchParams.store} />
+            <UpdateLocation>
+                <FormUpdateLocation store={searchParams.store}/>
+            </UpdateLocation>
         </div>
     </div>
     )
